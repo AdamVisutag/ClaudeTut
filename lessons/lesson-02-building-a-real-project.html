@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 02 — Building a Real Project</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --accent: #6c63ff;
+      --accent2: #e94560;
+      --green: #2ecc71;
+      --blue: #3498db;
+      --orange: #f39c12;
+      --text: #1a1a2e;
+      --muted: #666;
+      --bg-code: #f4f3ff;
+      --border: #e0deff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #fff;
+      font-size: 13pt;
+      line-height: 1.7;
+    }
+
+    /* ── Cover Page ── */
+    .cover {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 40px;
+      page-break-after: always;
+    }
+
+    .cover .badge {
+      background: rgba(108,99,255,0.25);
+      border: 1px solid rgba(108,99,255,0.6);
+      color: #a8a4ff;
+      font-size: 11pt;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 20px;
+      border-radius: 20px;
+      margin-bottom: 32px;
+    }
+
+    .cover h1 {
+      font-size: 40pt;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, #fff 0%, #a8dadc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cover .subtitle {
+      font-size: 14pt;
+      color: rgba(255,255,255,0.6);
+      max-width: 580px;
+      margin-bottom: 48px;
+    }
+
+    .cover .meta {
+      display: flex;
+      gap: 40px;
+      color: rgba(255,255,255,0.45);
+      font-size: 10.5pt;
+    }
+
+    .cover .meta span { display: flex; align-items: center; gap: 6px; }
+
+    .cover-diagram {
+      margin: 40px 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 11pt;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cover-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 16px 24px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 10.5pt;
+    }
+
+    .cover-arrow {
+      color: rgba(255,255,255,0.4);
+      font-size: 18pt;
+    }
+
+    /* ── Content Pages ── */
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 64px 60px;
+      page-break-after: always;
+    }
+
+    .page:last-child { page-break-after: auto; }
+
+    .chapter-label {
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 26pt;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .lead {
+      font-size: 12.5pt;
+      color: var(--muted);
+      margin-bottom: 40px;
+      max-width: 620px;
+    }
+
+    h3 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: var(--text);
+      margin: 36px 0 12px;
+    }
+
+    p { margin-bottom: 16px; color: #333; }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: var(--bg-code);
+      border-radius: 0 10px 10px 0;
+      padding: 18px 22px;
+      margin: 24px 0;
+    }
+
+    .callout.green { border-color: var(--green); background: #f0fff6; }
+    .callout.orange { border-color: var(--orange); background: #fffbf0; }
+    .callout.red { border-color: var(--accent2); background: #fff5f7; }
+
+    .callout-title {
+      font-size: 9.5pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .callout.green .callout-title { color: #27ae60; }
+    .callout.orange .callout-title { color: #d68910; }
+    .callout.red .callout-title { color: var(--accent2); }
+
+    .callout p { margin: 0; font-size: 12pt; }
+
+    /* ── Code blocks ── */
+    pre {
+      background: #1a1a2e;
+      color: #a8dadc;
+      font-family: 'Fira Code', monospace;
+      font-size: 10.5pt;
+      padding: 22px 26px;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+      line-height: 1.65;
+    }
+
+    pre .comment { color: #555e7b; }
+    pre .cmd { color: #e94560; }
+    pre .str { color: #a8dadc; }
+    pre .kw { color: #c678dd; }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: var(--bg-code);
+      color: var(--accent);
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 11pt;
+    }
+
+    /* ── Diagrams ── */
+    .diagram {
+      background: #1a1a2e;
+      border-radius: 12px;
+      padding: 30px 36px;
+      margin: 28px 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 10pt;
+      color: #a8dadc;
+      line-height: 1.8;
+    }
+
+    .diagram .label { color: #6c63ff; font-weight: 700; }
+    .diagram .dim { color: #555e7b; }
+    .diagram .hi { color: #e94560; }
+    .diagram .go { color: #2ecc71; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 11.5pt;
+    }
+
+    th {
+      background: var(--accent);
+      color: #fff;
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 10.5pt;
+    }
+
+    th:first-child { border-radius: 8px 0 0 0; }
+    th:last-child { border-radius: 0 8px 0 0; }
+
+    td {
+      padding: 11px 16px;
+      border-bottom: 1px solid #ece9ff;
+      color: #333;
+    }
+
+    tr:nth-child(even) td { background: #f9f8ff; }
+    tr:last-child td { border-bottom: none; }
+
+    .td-yes { color: #27ae60; font-weight: 600; }
+    .td-no { color: var(--accent2); font-weight: 600; }
+    .td-sometimes { color: var(--orange); font-weight: 600; }
+
+    /* ── Steps ── */
+    .steps { margin: 24px 0; }
+
+    .step {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 11pt;
+      min-width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-body h4 { font-size: 12pt; font-weight: 600; margin-bottom: 3px; }
+    .step-body p { margin: 0; font-size: 11.5pt; color: var(--muted); }
+
+    /* ── Two-column ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .card h4 {
+      font-size: 12pt;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card p { font-size: 11pt; color: var(--muted); margin: 0; }
+
+    .card .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14pt;
+    }
+
+    /* ── Tech stack cards ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .stack-card {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+
+    .stack-card .stack-name {
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .stack-card .stack-role {
+      font-size: 9.5pt;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .stack-card p { font-size: 10.5pt; color: #555; margin: 0; }
+
+    /* ── Footer ── */
+    .page-footer {
+      margin-top: 48px;
+      padding-top: 18px;
+      border-top: 1px solid #ece9ff;
+      display: flex;
+      justify-content: space-between;
+      color: #bbb;
+      font-size: 9.5pt;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+      border-radius: 2px;
+      margin: 40px 0;
+    }
+
+    /* ── Summary box ── */
+    .summary {
+      background: linear-gradient(135deg, #6c63ff11, #6c63ff22);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 26px 28px;
+      margin: 32px 0;
+    }
+
+    .summary h4 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+
+    .summary ul { padding-left: 20px; }
+    .summary li { margin-bottom: 7px; font-size: 11.5pt; }
+
+    @media print {
+      body { font-size: 11pt; }
+      .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .diagram { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     COVER
+════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="badge">Lesson 02</div>
+  <h1>Building a Real Project<br>from Scratch</h1>
+  <p class="subtitle">Fork vs clone, giving Claude lasting context, starting a real repo, planning a tech stack, and scaffolding your first Next.js app.</p>
+
+  <div class="cover-diagram">
+    <div class="cover-box">Fork / Clone<br><small style="opacity:.6;font-weight:400">ownership model</small></div>
+    <div class="cover-arrow">→</div>
+    <div class="cover-box">CLAUDE.md<br><small style="opacity:.6;font-weight:400">project memory</small></div>
+    <div class="cover-arrow">→</div>
+    <div class="cover-box">Tech Stack<br><small style="opacity:.6;font-weight:400">planning</small></div>
+    <div class="cover-arrow">→</div>
+    <div class="cover-box">Next.js App<br><small style="opacity:.6;font-weight:400">scaffolded &amp; running</small></div>
+  </div>
+
+  <div class="meta">
+    <span>&#128197; May 2026</span>
+    <span>&#128218; 6 Topics</span>
+    <span>&#128640; Real Product Started</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 1 — Fork vs Clone
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="chapter-label">Chapter 1</div>
+  <h2>Fork vs Clone</h2>
+  <p class="lead">Both commands download a GitHub repo. The difference is who owns what — and what you can do with it afterwards.</p>
+
+  <div class="two-col">
+    <div class="card">
+      <h4><span class="icon">&#128203;</span> git clone</h4>
+      <p>Downloads a repo to your computer. The remote still points at the <strong>original owner's GitHub</strong>. You can't push changes back unless they gave you permission.</p>
+    </div>
+    <div class="card">
+      <h4><span class="icon">&#127860;</span> Fork</h4>
+      <p>Copies the repo to <strong>your GitHub account first</strong>. Then you clone your fork. You now own it, can push freely, and the original source is completely separate.</p>
+    </div>
+  </div>
+
+  <h3>The Ownership Diagram</h3>
+  <div class="diagram">
+<span class="dim">── Clone (Access, not Ownership) ──────────────────────────────────</span>
+
+  <span class="label">github.com/original/repo</span>
+       ↓  git clone
+  <span class="go">Your Computer</span>  (remote = original owner's GitHub)
+  <span class="hi">→ You can't push. You're borrowing it.</span>
+
+
+<span class="dim">── Fork (Ownership) ────────────────────────────────────────────────</span>
+
+  <span class="label">github.com/original/repo</span>
+       ↓  Fork on GitHub
+  <span class="go">github.com/YOU/repo</span>  ← your own copy in the cloud
+       ↓  git clone
+  <span class="go">Your Computer</span>  (remote = YOUR GitHub)
+  <span class="go">→ Full ownership. Push, modify, build freely.</span>
+  </div>
+
+  <h3>When to Use Each</h3>
+  <table>
+    <tr>
+      <th>Goal</th>
+      <th>What to do</th>
+    </tr>
+    <tr>
+      <td>Just run it locally and explore</td>
+      <td>Clone directly</td>
+    </tr>
+    <tr>
+      <td>Make it your own and build on top of it</td>
+      <td>Fork first, then clone your fork</td>
+    </tr>
+    <tr>
+      <td>Contribute back to the original project</td>
+      <td>Fork → make changes → open a Pull Request</td>
+    </tr>
+    <tr>
+      <td>Completely independent copy — no link to original</td>
+      <td>Clone → delete <code>.git</code> → <code>git init</code> → push to new repo</td>
+    </tr>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-title">The Practical Rule</div>
+    <p>If you want to <strong>own and build</strong> something — fork first. If you just want to <strong>read or run</strong> it — clone is fine.</p>
+  </div>
+
+  <h3>The "Fully Independent Copy" Method</h3>
+  <p>Fork still shows "forked from original/repo" on your GitHub. If you want zero connection to the source — use this three-step method:</p>
+<pre><span class="comment"># 1. Clone the repo you want</span>
+<span class="cmd">git clone</span> https://github.com/someuser/some-repo
+
+<span class="comment"># 2. Delete its git history (remove .git folder)</span>
+<span class="cmd">Remove-Item</span> -Recurse -Force some-repo/.git
+
+<span class="comment"># 3. Re-initialize and push to your own new repo</span>
+<span class="cmd">cd</span> some-repo
+<span class="cmd">git init</span>
+<span class="cmd">git remote add</span> origin https://github.com/YOU/your-new-repo
+<span class="cmd">git add</span> .
+<span class="cmd">git commit</span> -m <span class="str">"Initial commit"</span>
+<span class="cmd">git push</span> -u origin master</pre>
+
+  <div class="page-footer">
+    <span>Lesson 02 — Building a Real Project from Scratch</span>
+    <span>Chapter 1: Fork vs Clone</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 2 — Multi-Project Sessions
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="chapter-label">Chapter 2</div>
+  <h2>Claude &amp; Multiple Projects</h2>
+  <p class="lead">Claude works best when it's opened directly inside the project folder it's going to work on. Here's why — and how to manage it.</p>
+
+  <h3>How Claude Knows Which Project You're In</h3>
+  <p>When you launch Claude Code from a folder, it reads that folder's git context, file structure, and any <code>CLAUDE.md</code> file it finds there. This is how it understands your project automatically without you having to re-explain it every session.</p>
+
+  <div class="diagram">
+<span class="dim">── Claude opened from ClaudeTut/ ───────────────────────────────────</span>
+
+  Reads:  ClaudeTut/CLAUDE.md          <span class="go">✓ sees learning project context</span>
+  Git:    github.com/AdamVisutag/ClaudeTut
+  Memory: lesson history, learner profile
+
+
+<span class="dim">── Claude opened from RVolumetrics_Dev/ ────────────────────────────</span>
+
+  Reads:  RVolumetrics_Dev/CLAUDE.md   <span class="go">✓ sees Recon Volumetrics context</span>
+  Git:    github.com/AdamVisutag/ReconVolumetrics
+  Memory: product spec, tech stack, dev context
+  </div>
+
+  <div class="callout orange">
+    <div class="callout-title">One Project Per Session</div>
+    <p>You can technically work on another folder from within any session — but Claude's git commands, file paths, and context will be anchored to where it was opened. For serious work: <strong>open Claude in the target project folder</strong>.</p>
+  </div>
+
+  <h3>The Practical Setup for Recon Volumetrics</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Open a terminal in the project folder</h4>
+        <p>Navigate to <code>C:\ReconVolumetrics\RVolumetrics_Dev</code> and launch Claude from there.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Claude auto-reads CLAUDE.md</h4>
+        <p>The product context, terminology, and priorities are all loaded automatically — no need to re-explain the project.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Claude auto-reads DEV_CONTEXT.md</h4>
+        <p>The tech stack decisions, implementation order, and current state are available from the first message.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout green">
+    <div class="callout-title">The Principle Behind This</div>
+    <p>Every project gets its own <strong>memory layer</strong> — its git history, its CLAUDE.md, its DEV_CONTEXT.md. When you launch Claude in that folder, all of it is immediately in context. You never start from zero.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Lesson 02 — Building a Real Project from Scratch</span>
+    <span>Chapter 2: Claude &amp; Multiple Projects</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 3 — Giving Claude Context
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="chapter-label">Chapter 3</div>
+  <h2>Giving Claude Lasting Context</h2>
+  <p class="lead">Claude has no memory between sessions by default. Two files change that — CLAUDE.md and DEV_CONTEXT.md. These are the most important files in any project you build AI-assisted.</p>
+
+  <h3>CLAUDE.md — The Product Brain</h3>
+  <p>This file sits at the root of your project and is automatically loaded by Claude Code at the start of every session. Think of it as a permanent instruction card that tells Claude <em>what this project is and what matters</em>.</p>
+
+  <table>
+    <tr>
+      <th>Put in CLAUDE.md</th>
+      <th>Why</th>
+    </tr>
+    <tr>
+      <td>What the product does</td>
+      <td>So Claude makes decisions aligned with your vision, not generic code</td>
+    </tr>
+    <tr>
+      <td>Who the users are</td>
+      <td>So UI and feature decisions fit the audience</td>
+    </tr>
+    <tr>
+      <td>What's in scope for MVP</td>
+      <td>So Claude doesn't over-engineer or go off-track</td>
+    </tr>
+    <tr>
+      <td>Key terminology</td>
+      <td>So Claude uses the right words (e.g. "Scene" not "3D file")</td>
+    </tr>
+    <tr>
+      <td>Strategic positioning</td>
+      <td>So Claude understands what you are and are NOT building</td>
+    </tr>
+  </table>
+
+  <h3>DEV_CONTEXT.md — The Technical Brain</h3>
+  <p>A second file for purely technical decisions. While CLAUDE.md is product and business context, DEV_CONTEXT.md is the developer's reference — written so you can open VS Code and pick up exactly where you left off.</p>
+
+  <div class="two-col">
+    <div class="card">
+      <h4>CLAUDE.md</h4>
+      <p>What are we building? For whom? What does "done" look like? Product-first context that shapes every decision.</p>
+    </div>
+    <div class="card">
+      <h4>DEV_CONTEXT.md</h4>
+      <p>Tech stack, install commands, folder structure, what's been built, what's next. Developer-facing reference for every session.</p>
+    </div>
+  </div>
+
+  <h3>Providing Files as Context (PDFs, Images)</h3>
+  <p>Claude can read any file in your project folder. To give Claude access to planning documents:</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Drop the files directly into the project folder</h4>
+        <p>PDFs, images, spreadsheets — just drag them in. If they're there, Claude can read them.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Commit them to git</h4>
+        <p>They become part of the repo. Any session (and any collaborator) can reference them.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Point Claude to them in CLAUDE.md</h4>
+        <p>Add a line like: <em>"Planning documents are in <code>Planning Files/</code>"</em> — Claude will know to read them for context.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">What We Did for Recon Volumetrics</div>
+    <p>Added three PDFs and a UX mockup PNG to <code>Planning Files/</code>. Claude read all four, then explained the full product concept back in plain language — confirming it understood the vision before any code was written.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Lesson 02 — Building a Real Project from Scratch</span>
+    <span>Chapter 3: Giving Claude Lasting Context</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 4 — Starting a New Git Repo
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="chapter-label">Chapter 4</div>
+  <h2>Starting a New Project from Scratch</h2>
+  <p class="lead">How to go from an empty folder to a live GitHub repo with your first meaningful commit — the exact steps used to launch Recon Volumetrics.</p>
+
+  <h3>The Full Setup Sequence</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Create the repo on GitHub first</h4>
+        <p>Go to github.com → New repository. Name it, set it to private, skip adding files (you'll push from local).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Initialize git in your local folder</h4>
+        <p><code>git init</code> — run this inside the project folder. This creates the <code>.git</code> history tracker.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>Connect local to GitHub</h4>
+        <p><code>git remote add origin &lt;url&gt;</code> — links your local repo to the GitHub repo you just created.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>Add your context files and commit</h4>
+        <p>Add CLAUDE.md, DEV_CONTEXT.md, planning files — then commit with a message that marks this as the starting point.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h4>Push to GitHub</h4>
+        <p><code>git push -u origin master</code> — uploads everything and sets the upstream tracking branch.</p>
+      </div>
+    </div>
+  </div>
+
+<pre><span class="comment"># Inside your project folder</span>
+<span class="cmd">git init</span>
+<span class="cmd">git remote add</span> origin https://github.com/AdamVisutag/ReconVolumetrics
+
+<span class="comment"># Stage everything and make the first commit</span>
+<span class="cmd">git add</span> .
+<span class="cmd">git commit</span> -m <span class="str">"Initial commit: planning docs, CLAUDE.md — MVP starting point"</span>
+
+<span class="comment"># Push to GitHub and set the tracking branch</span>
+<span class="cmd">git push</span> -u origin master</pre>
+
+  <h3>The .gitignore File</h3>
+  <p>Some things should never go to GitHub — private config, Claude's internal settings, API keys. The <code>.gitignore</code> file tells git what to skip.</p>
+
+  <table>
+    <tr>
+      <th>Entry</th>
+      <th>What it excludes</th>
+    </tr>
+    <tr>
+      <td><code>.claude/</code></td>
+      <td>Claude Code's local settings — machine-specific, not for sharing</td>
+    </tr>
+    <tr>
+      <td><code>node_modules/</code></td>
+      <td>npm packages — huge folder, regenerated with <code>npm install</code></td>
+    </tr>
+    <tr>
+      <td><code>.env</code></td>
+      <td>Environment variables — secrets like API keys, database URLs</td>
+    </tr>
+    <tr>
+      <td><code>.next/</code></td>
+      <td>Next.js build output — generated during build, not source code</td>
+    </tr>
+  </table>
+
+  <div class="callout orange">
+    <div class="callout-title">First Commit Message Matters</div>
+    <p>The first commit message is a permanent marker in your history. Write one that clearly marks <strong>what this is and what state it's in</strong>. You'll thank yourself in six months when scrolling the log.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Lesson 02 — Building a Real Project from Scratch</span>
+    <span>Chapter 4: Starting a New Project from Scratch</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 5 — Planning a Tech Stack
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="chapter-label">Chapter 5</div>
+  <h2>Planning a Tech Stack</h2>
+  <p class="lead">The technology choices you make before writing a single line of code shape everything. Here's the stack we chose for Recon Volumetrics — and why each piece was selected.</p>
+
+  <h3>The Chosen Stack</h3>
+  <div class="stack-grid">
+    <div class="stack-card">
+      <div class="stack-name">Next.js 15</div>
+      <div class="stack-role">Framework</div>
+      <p>The industry-standard React framework. Handles routing, page structure, and project organization. AI tools generate accurate Next.js code reliably — making Claude more useful.</p>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name">TypeScript</div>
+      <div class="stack-role">Language</div>
+      <p>JavaScript with type safety. Catches errors before they run. Especially important in a complex platform with many moving parts.</p>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name">Tailwind CSS</div>
+      <div class="stack-role">Styling</div>
+      <p>Utility-first CSS that makes responsive layouts straightforward. Desktop 3-panel → mobile stacked view is handled by adding breakpoint classes like <code>md:flex-row</code>.</p>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name">shadcn/ui</div>
+      <div class="stack-role">UI Components</div>
+      <p>Dark-theme component library built for Next.js + Tailwind. Buttons, panels, tables, tabs, dialogs — all dark and professional out of the box. Components are copy-pasted into your project (fully customizable).</p>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name">Three.js + GaussianSplats3D</div>
+      <div class="stack-role">3D Viewer</div>
+      <p>Three.js is the standard WebGL 3D library. <code>@mkkellogg/GaussianSplats3D</code> renders Gaussian splat <code>.ply</code>/<code>.splat</code> files in the browser — the core visual feature of the platform.</p>
+    </div>
+    <div class="stack-card">
+      <div class="stack-name">Zustand</div>
+      <div class="stack-role">State Management</div>
+      <p>Lightweight shared state (current site, active scan, selected scene). Minimal boilerplate — far simpler than Redux.</p>
+    </div>
+  </div>
+
+  <h3>The Layout Architecture</h3>
+  <div class="diagram">
+<span class="dim">── Desktop (md and above) ──────────────────────────────────────────</span>
+
+ ┌──────┬──────────────────────────────┬──────────┐
+ │ Side │         3D Viewer            │  Data    │
+ │ Nav  │    (GaussianSplats3D)        │  Panels  │
+ │      ├──────────────────────────────┤  Reports │
+ │      │        Timeline Bar          │  Media   │
+ └──────┴──────────────────────────────┴──────────┘
+
+
+<span class="dim">── Mobile (below md — same code, stacked) ──────────────────────────</span>
+
+ ┌─────────────────────┐
+ │    Top Nav Bar      │
+ ├─────────────────────┤
+ │    3D Viewer        │
+ ├─────────────────────┤
+ │    Timeline Bar     │
+ ├─────────────────────┤
+ │    Scene Browser    │
+ ├─────────────────────┤
+ │    Data Panels      │
+ └─────────────────────┘
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">One Codebase, Two Layouts</div>
+    <p>Tailwind handles the entire responsive shift with a single breakpoint class. The same components render as a side-by-side dashboard on desktop and a stacked single column on mobile — no separate mobile codebase needed.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>Lesson 02 — Building a Real Project from Scratch</span>
+    <span>Chapter 5: Planning a Tech Stack</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 6 — Setting Up Next.js
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="chapter-label">Chapter 6</div>
+  <h2>Setting Up Next.js</h2>
+  <p class="lead">What it took to go from zero to a running Next.js dev server — including the obstacles we hit and how they were solved.</p>
+
+  <h3>Prerequisites</h3>
+  <p>Next.js 15 requires Node.js version 18 or higher. Node.js is the runtime that executes JavaScript outside the browser — it powers <code>npm</code>, the package manager used to install everything.</p>
+
+<pre><span class="comment"># Check your Node.js version</span>
+<span class="cmd">node</span> --version
+
+<span class="comment"># If below v18, install the latest LTS via Windows Package Manager</span>
+<span class="cmd">winget install</span> OpenJS.NodeJS.LTS
+
+<span class="comment"># Confirm after install (open a new terminal)</span>
+<span class="cmd">node</span> --version   <span class="comment"># should show v24.x.x or similar</span></pre>
+
+  <h3>Scaffolding the App</h3>
+  <p><code>create-next-app</code> sets up the entire project structure — TypeScript config, Tailwind CSS, ESLint, App Router, folder structure — in one command.</p>
+
+<pre><span class="comment"># Scaffold a new Next.js app (run from the parent directory)</span>
+<span class="cmd">npx</span> create-next-app@latest recon-volumetrics
+
+<span class="comment"># When prompted, select:</span>
+<span class="comment">#   TypeScript   → Yes</span>
+<span class="comment">#   ESLint       → Yes</span>
+<span class="comment">#   Tailwind CSS → Yes</span>
+<span class="comment">#   App Router   → Yes</span>
+<span class="comment">#   Turbopack    → Yes (faster dev server)</span>
+
+<span class="comment"># Start the dev server</span>
+<span class="cmd">npm run dev</span></pre>
+
+  <h3>Obstacles We Hit (and Solved)</h3>
+  <table>
+    <tr>
+      <th>Problem</th>
+      <th>Cause</th>
+      <th>Fix</th>
+    </tr>
+    <tr>
+      <td>Node.js v16 — too old</td>
+      <td>Next.js 15 requires Node 18+. Old version was v16.16.0</td>
+      <td>Installed Node.js v24.15.0 via <code>winget</code></td>
+    </tr>
+    <tr>
+      <td>npm naming restriction</td>
+      <td>npm forbids capital letters in package names. Folder was named <code>RVolumetrics_Dev</code></td>
+      <td>Scaffolded in parent dir as <code>recon-volumetrics</code>, moved files, updated <code>package.json</code></td>
+    </tr>
+    <tr>
+      <td>PATH not updated after install</td>
+      <td>Terminal session didn't pick up new Node.js path</td>
+      <td>Used full path to <code>npm.cmd</code> / <code>npx.cmd</code>, or opened a new terminal</td>
+    </tr>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-title">Where We Left Off</div>
+    <p>Next.js 15.5.15 is scaffolded and running at <code>http://localhost:3000</code>. The project folder is <code>C:\ReconVolumetrics\RVolumetrics_Dev</code>. Next session starts with installing shadcn/ui and building the layout shell.</p>
+  </div>
+
+  <h3>The Implementation Order from Here</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h4>Install shadcn/ui</h4>
+        <p>Run <code>npx shadcn@latest init</code> — sets up dark theme, component system.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h4>Build the layout shell</h4>
+        <p>Responsive 3-panel desktop / stacked mobile skeleton with placeholder content.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h4>3D viewer component</h4>
+        <p>Integrate GaussianSplats3D, load a sample <code>.splat</code> file, confirm it renders.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <h4>Scene browser, timeline, data panels</h4>
+        <p>Build each UI panel in isolation, then wire them together.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>Lesson 02 — Building a Real Project from Scratch</span>
+    <span>Chapter 6: Setting Up Next.js</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 7 — Summary & Cheat Sheet
+════════════════════════════════════════════ -->
+<div class="page">
+  <div class="chapter-label">Chapter 7</div>
+  <h2>Summary &amp; Cheat Sheet</h2>
+  <p class="lead">Everything from this session in one place.</p>
+
+  <div class="summary">
+    <h4>Key Mental Models</h4>
+    <ul>
+      <li><strong>Clone</strong> = borrow. <strong>Fork</strong> = own. For building on top of something, fork first.</li>
+      <li>Open Claude <strong>inside the project folder</strong> — that's how it loads the right context automatically.</li>
+      <li><strong>CLAUDE.md</strong> = the product brain. Every session, Claude reads it first. Write it once, benefit forever.</li>
+      <li><strong>DEV_CONTEXT.md</strong> = the technical brain. Current state, tech stack, what's next. Your VS Code session anchor.</li>
+      <li>You can drop <strong>any file</strong> (PDF, image, doc) into the project folder — Claude can read it as context.</li>
+      <li>Starting a project: <code>git init</code> → connect remote → commit context files → push.</li>
+      <li><strong>npm package names</strong> cannot contain capital letters. Use lowercase with hyphens.</li>
+      <li>Always check your <strong>Node.js version</strong> before scaffolding — frameworks have minimum requirements.</li>
+    </ul>
+  </div>
+
+  <h3>Command Cheat Sheet</h3>
+  <table>
+    <tr>
+      <th>Command</th>
+      <th>What it does</th>
+    </tr>
+    <tr><td><code>git remote add origin &lt;url&gt;</code></td><td>Connect local repo to a GitHub repo</td></tr>
+    <tr><td><code>git push -u origin master</code></td><td>First push — sets upstream tracking</td></tr>
+    <tr><td><code>node --version</code></td><td>Check your Node.js version</td></tr>
+    <tr><td><code>winget install OpenJS.NodeJS.LTS</code></td><td>Install Node.js on Windows</td></tr>
+    <tr><td><code>npx create-next-app@latest &lt;name&gt;</code></td><td>Scaffold a new Next.js project</td></tr>
+    <tr><td><code>npm run dev</code></td><td>Start the Next.js dev server</td></tr>
+    <tr><td><code>npx shadcn@latest init</code></td><td>Install shadcn/ui (next session)</td></tr>
+  </table>
+
+  <div class="callout green">
+    <div class="callout-title">What Was Built This Session</div>
+    <p>The Recon Volumetrics GitHub repo was created from scratch. Planning documents were committed. CLAUDE.md and DEV_CONTEXT.md were written. Node.js v24.15.0 was installed. Next.js 15.5.15 was scaffolded with TypeScript, Tailwind v4, ESLint, and App Router. The dev server confirmed running at <code>localhost:3000</code>. The platform is off the ground.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3>About Recon Volumetrics</h3>
+  <p>The project we started building in this lesson. A recurring 3D site documentation platform — monthly drone flights, Gaussian splat 3D reconstructions, and a private archive with timeline, annotations, and reports. The core idea: <strong>version control for physical sites</strong>.</p>
+
+  <table>
+    <tr>
+      <th>Layer</th>
+      <th>What it is</th>
+    </tr>
+    <tr>
+      <td>Service</td>
+      <td>Monthly drone flights, reports, archive — sold on subscription</td>
+    </tr>
+    <tr>
+      <td>Platform</td>
+      <td>Private web app with 3D viewer, timeline, data panels, user management</td>
+    </tr>
+    <tr>
+      <td>Infrastructure</td>
+      <td>Cloud multi-GPU pipeline processing drone footage into Gaussian splats at scale</td>
+    </tr>
+  </table>
+
+  <div class="page-footer">
+    <span>Lesson 02 — Building a Real Project from Scratch</span>
+    <span>Chapter 7: Summary &amp; Cheat Sheet</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -56,10 +56,56 @@ This file is maintained by Claude and updated after every lesson. It provides on
 
 ---
 
+### Lesson 02 — Building a Real Project from Scratch
+**Date:** May 2026
+**File:** `lesson-02-building-a-real-project.html`
+
+**What was covered:**
+- Fork vs clone — ownership model, when to use each, the "fully independent copy" method
+- Multi-project Claude sessions — open Claude inside the target project folder for correct context
+- CLAUDE.md — the product brain, auto-loaded every session, permanent instruction card
+- DEV_CONTEXT.md — technical brain for VS Code sessions: tech stack, current state, what's next
+- Providing files as context — dropping PDFs and images into the project folder for Claude to read
+- Starting a new Git repo from scratch — `git init` → remote → context files → first commit → push
+- .gitignore — what to exclude (`.claude/`, `node_modules/`, `.env`, `.next/`)
+- Frontend tech stack planning — Next.js 15, TypeScript, Tailwind CSS, shadcn/ui, Three.js + GaussianSplats3D, Zustand, TanStack Query
+- Responsive layout architecture — desktop 3-panel vs mobile stacked, Tailwind breakpoints
+- Node.js v24.15.0 installed via `winget`
+- Next.js 15.5.15 scaffolded (TypeScript, Tailwind v4, ESLint, App Router, Turbopack)
+- npm naming rules — lowercase only, no capitals
+
+**Hands-on project built:**
+- Recon Volumetrics GitHub repo created and first commit pushed
+- Planning PDFs and UX mockup added to `Planning Files/`
+- CLAUDE.md and DEV_CONTEXT.md written for the project
+- Next.js 15 app scaffolded and running at `localhost:3000`
+
+**Key things that clicked fast:**
+- "CLAUDE.md is the instruction card the project carries with it forever"
+- Immediately grasped why fork = ownership and clone = access
+- Connected the three-layer product structure (service / platform / infrastructure) clearly
+
+---
+
+## Current Knowledge Level
+
+| Area | Level |
+|---|---|
+| Product thinking / UX | Advanced |
+| Working with dev teams | Advanced |
+| Git & GitHub concepts | Building foundations — commits, push/pull, branches, remotes, .gitignore |
+| HTML / CSS / JS | Beginner (has seen the code, needs more reps) |
+| Frontend frameworks | Early exposure — Next.js scaffolded, concepts introduced |
+| Terminal / command line | Growing — ran winget, npm, npx, git commands independently |
+| Backend / databases | Not yet started |
+
+---
+
 ## Notes for Future Sessions
 
 - Start with the "why" and the mental model before showing commands — he connects to purpose first.
 - He responds well to analogies from business (deployment = release, branch = parallel workstream).
 - Lessons should be saved **locally only** — never push the `lessons/` folder to GitHub.
-- After each lesson, generate a PDF and update this file with what was covered and what level he's at now.
-- Next natural step: **backend fundamentals** — server, database, API, how frontend talks to backend.
+- After each lesson, update this file with what was covered and current level.
+- Next natural step for Recon Volumetrics: **install shadcn/ui → build layout shell → 3D viewer**.
+- Next natural step for learning: **React fundamentals** — components, props, state, how JSX works.
