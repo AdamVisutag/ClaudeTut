@@ -82,6 +82,20 @@
       transform: scale(1.04);
     }
 
+    #reset-scores {
+      margin-top: 0.6rem;
+      padding: 0.4rem 1.4rem;
+      font-size: 0.85rem;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    #reset-scores:hover { color: #eee; border-color: #eee; }
+
     #scores {
       display: flex;
       gap: 2rem;
@@ -117,6 +131,7 @@
   </div>
 
   <button id="restart">Restart</button>
+  <button id="reset-scores">Reset Scores</button>
 
   <script>
     const WINS = [
@@ -185,6 +200,14 @@
     });
 
     document.getElementById('restart').addEventListener('click', init);
+
+    document.getElementById('reset-scores').addEventListener('click', () => {
+      scores.X = 0; scores.O = 0; scores.D = 0;
+      scoreX.textContent = 0;
+      scoreO.textContent = 0;
+      scoreD.textContent = 0;
+      init();
+    });
 
     init();
   </script>
